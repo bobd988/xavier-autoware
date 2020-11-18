@@ -1,0 +1,233 @@
+Jetson Xavier 13.0 2-12-2020 with many errors but solved all
+
+#dependencies
+sudo pip3 install -U numpy==1.16.1 future==0.17.1 mock==3.0.5 keras_preprocessing==1.0.5 keras_applications==1.0.6 enum34 futures testresources setuptools protobuf
+#the h5py 
+
+
+
+#install tf 1.13.1
+
+https://docs.nvidia.com/deeplearning/frameworks/install-tf-jetson-platform/index.html
+
+sudo pip3 install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp/v42 tensorflow-gpu==1.13.1+nv19.3
+
+sudo pip3 install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp/v42 tensorflow-gpu==1.13.1+nv19.3
+
+
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 2
+
+sudo update-alternatives  --set python /usr/bin/python3.6
+
+# h5py install freeze, use source download  and install (python setup.py install) 
+
+sudo pip3 install -U numpy==1.16.1 future==0.17.1 mock==3.0.5 h5py==2.9.0 keras_preprocessing==1.0.5 keras_applications==1.0.6 enum34 futures testresources setuptools protobuf
+
+
+sudo apt-get install libblas-dev liblapack-dev libatlas-base-dev gfortran
+
+sudo pip3 install scipy
+./configure
+
+
+bazel build --config=opt --config=nonccl //tensorflow/tools/pip_package:build_pip_package --incompatible_remove_native_http_archive=false --verbose_failures --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0"
+
+tensorflow 1.13 with below compatible
+$ conda create -n bert python=3.6
+$ conda activate bert
+$ conda install keras==2.0.8
+$ conda install keras-gpu==2.0.8
+$ pip install keras-pos-embd==0.10.0
+$ pip install keras-transformer==0.22.0
+
+
+#fix jetson crash issue 
+<key name='enabled' type='b'>
+   <summary>Enable remote access to the desktop</summary>
+   <description>
+   If true, allows remote access to the desktop via the RFB
+   protocol. Users on remote machines may then connect to the
+   desktop using a VNC viewer.
+   </description>
+   <default>false</default>
+</key>
+
+sudo glib-compile-schemas /usr/share/glib-2.0/schemas
+
+$ gsettings set org.gnome.Vino require-encryption false
+$ gsettings set org.gnome.Vino prompt-enabled false
+
+
+
+2-7-2020
+
+AUTOWARE_COMPILE_WITH_CUDA=1 colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
+
+##
+gives error for missing 
+
+jsk_recognition_msgsConfig.cmake
+jsk_recognition_msgs-config.cmake
+
+the solution is 
+ 
+ sudo apt-get install ros-melodic-jsk-recognition-msgs
+
+jsk_rviz_pluginsConfig.cmake
+    jsk_rviz_plugins-config.cmake
+
+the solution is 
+
+ sudo apt-get install ros-melodic-jsk-rviz-plugins
+
+##
+
+make[2]: *** No rule to make target '/usr/lib/aarch64-linux-gnu/libopencv_objdetect.so.3.2.0', needed by 'devel/lib/autoware_health_checker/health_aggregator'.  Stop.
+solution: follow below article to compile & reinstasll opencv 
+https://answers.ros.org/question/323322/failed-to-install-autoware-on-nvidia-jetson-agx-xavier/
+
+//cmd to check opencv version to verify install ok  
+
+
+
+
+pkg-config --modversion opencv
+
+
+
+##
+Starting >>> vector_map
+--- stderr: lanelet2_io                                                                                                                    
+CMake Error at /usr/share/cmake-3.10/Modules/FindPackageHandleStandardArgs.cmake:137 (message):
+  Could NOT find pugixml (missing: PUGIXML_LIBRARIES PUGIXML_INCLUDE_DIRS)
+Call Stack (most recent call first):
+  /usr/share/cmake-3.10/Modules/FindPackageHandleStandardArgs.cmake:378 (_FPHSA_FAILURE_MESSAGE)
+  /home/nvidia/disk512/autoware/autoware.ai/install/mrt_cmake_modules/share/mrt_cmake_modules/cmake/Modules/Findpugixml.cmake:10 (find_package_handle_standard_args)
+  /home/nvidia/disk512/autoware/autoware.ai/install/mrt_cmake_modules/share/mrt_cmake_modules/cmake/Modules/FindAutoDeps.cmake:167 (find_package)
+  /home/nvidia/disk512/autoware/autoware.ai/install/mrt_cmake_modules/share/mrt_cmake_modules/cmake/Modules/FindAutoDeps.cmake:215 (_find_dep)
+  CMakeLists.txt:16 (find_package)
+
+the solution is 
+
+sudo apt-get install -y libpugixml-dev
+
+sudo apt-get install libgeographic-dev
+sudo apt-get install geographiclib-tools
+
+// download and upgrade for error require >=3.3.7.
+https://packages.debian.org/sid/all/libeigen3-dev/download
+sudo dpkg -i libeigen3-dev_3.3.7-1_all.deb 
+
+// cmd to get current version to 3.3.7 correctly.
+dpkg -s libeigen3-dev | grep 'Version'
+
+// nmea_msgsConfig.cmake not found error
+sudo apt-get install ros-melodic-nmea-msgs
+
+//grid_map_rosConfig.cmake cannot found error
+
+sudo apt install ros-melodic-grid-map
+
+//automotive_platform_msgsConfig.cmake
+
+sudo apt install ros-melodic-automotive-platform-msgs
+
+sudo apt install ros-melodic-automotive-navigation-msgs
+
+sudo apt install ros-melodic-velodyne-pointcloud
+
+sudo apt install ros-melodic-gps-common
+
+sudo apt install ros-melodic-geodesy
+
+//undefined reference to `cv::read in calibration_publisher. 
+
+
+ dpkg -l | grep libopencv  // 3.2.0
+
+
+
+nvidia@nvidia-xavier:~/disk512/autoware/autoware.ai$  locate OpenCVConfig.cmake
+/home/nvidia/opencv/build/OpenCVConfig.cmake
+/home/nvidia/opencv/build/unix-install/OpenCVConfig.cmake
+/home/nvidia/opencv/cmake/templates/OpenCVConfig.cmake.in
+/usr/local/share/OpenCV/OpenCVConfig.cmake
+/usr/share/OpenCV/OpenCVConfig.cmake
+
+//libopencv_imgcodecs.so
+/usr/bin/ld: warning: libopencv_imgproc.so.3.4, needed by /usr/local/lib/libopencv_highgui.so.3.4.3, may conflict with libopencv_imgproc.so.3.2
+/usr/bin/ld: warning: libopencv_core.so.3.4, needed by /usr/local/lib/libopencv_highgui.so.3.4.3, may conflict with libopencv_core.so.3.2
+
+//  https://answers.ros.org/question/332086/error-when-building-package-of-calibration_publisher-while-installing-autoware/
+//Ignore calibration_publisher, the demo test will fail.
+
+The error is caused by the codes in calibration_publisher.cpp;
+fs["CameraExtrinsicMat"] >> CameraExtrinsicMat;
+fs["CameraMat"] >> CameraMat;
+fs["DistCoeff"] >> DistCoeff;
+fs["ImageSize"] >> ImageSize;
+fs["DistModel"] >> DistModel;
+
+// changes follow above link 
+
+/home/nvidia/disk512/autoware/autoware.ai/src/autoware/utilities/calibration_publisher/src/calibration_publisher.cpp
+
+option1:
+Yes I have also tried and it doesn't seem to be a problem of the OpenCV installation.
+Now, I comment the following line:
+fs["DistModel"] >> DistModel;
+and passed the build, very strange
+
+option2: I add a definition in the file of calibration_publisher.cpp: that is to convert cv::String to std::string, and the error is finally solved. I will test the demo next step.
+
+static cv::Mat CameraExtrinsicMat;
+static cv::Mat CameraMat;
+static cv::Mat DistCoeff;
+static cv::Size ImageSize;
+static std::string DistModel
+static cv::String DistModel_cv;
+then modify the corresponding code to:
+
+fs["DistModel"] >> DistModel_cv;
+DistModel = DistModel_cv.operator std::string();
+
+when running viz and run bag there is error of fixed frame(world) not found
+also there is error in vehicle model. the play of bag not able to show simulation.
+- change frame to baselink , this will show up some images
+
+##
+Failed connect to /tmp/autoware_proc_manager
+... logging to /home/nvidia/.ros/log/598cdb7c-4db5-11ea-9877-8ad3e57d8ffd/roslaunch-nvidia-xavier-27255.log
+Checking log directory for disk usage. This may take awhile.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is <1GB.
+
+RLException: while processing /home/nvidia/.autoware/data/tf/tf.launch:
+Invalid roslaunch XML syntax: [Errno 2] No such file or directory: u'/home/nvidia/.autoware/data/tf/tf.launch'
+The traceback for the exception was written to the log file
+['roslaunch', '/home/nvidia/disk512/autoware/autoware/docs/quick_start/my_localization.launch']
+pid=27277
+sched policy=OTHER prio=0
+Failed connect to /tmp/autoware_proc_manager
+[ WARN] [1581558988.330259855]: The 'state_publisher' executable is deprecated. Please use 'robot_state_publisher' instead
+['rosrun', 'rviz', 'rviz']
+pid=27367
+sched policy=OTHER prio=0
+Failed connect to /tmp/autoware_proc_manager
+Gtk-Message: 17:57:01.193: GtkDialog mapped without a transient parent. This is discouraged.
+
+- checked the tf folder there is no such file. program looks for hardcoded folder !!
+- ~/disk512/.autoware/data/tf$ cp tf.launch  /home/nvidia/.autoware/data/tf/
+
+//as home folder has not enougn space, copy to ~/disk512 folder
+
+ Could not find file '/home/nvidia/.autoware/data/map/pointcloud_map/bin_Laser-00166_-00864.pcd'.
+- copied disk512/.autoware/data to ~/.autoware solve this
+
+
+
+
+
+
+
